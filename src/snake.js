@@ -143,7 +143,10 @@ function setMoveEvents() {
     });
     
     //Touch events
-    var mc = new Hammer(document.getElementById('field'));
+    var options = {
+        preventDefault: true
+    };
+    var mc = new Hammer(document.getElementById('field'), options);
     mc.get('swipe').set({ direction: Hammer.DIRECTION_ALL });
 
     mc.on("swipeleft swipeup swiperight swipedown", function (ev) {        
@@ -193,28 +196,28 @@ function setMoveEvents() {
     
     //Press your finger on the screen to speed up snake
     var pressFinger = new Hammer.Manager(document.getElementById('field'));
-    
+
     pressFinger.add(new Hammer.Press({ event: 'press', time: 500 }));
-    
-    pressFinger.on("press", function(){
+
+    pressFinger.on("press", function () {
         speedUpSnake(200);
         console.log('press');
     });
-    
-    pressFinger.on("pressup", function(){
+
+    pressFinger.on("pressup", function () {
         speedUpSnake(600);
         console.log('press up');
     });
     
     //Double tab for break
-    pressFinger.add( new Hammer.Tap({ event: 'tap', taps: 1 }) );
-    
-    pressFinger.on("tap", function(){
-        if(stopMovingOfSnake){
+    pressFinger.add(new Hammer.Tap({ event: 'tap', taps: 1 }));
+
+    pressFinger.on("tap", function () {
+        if (stopMovingOfSnake) {
             continueSnake();
-        }else{
+        } else {
             pauseSnake();
-        }        
+        }
     });
 }
 
