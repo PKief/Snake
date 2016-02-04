@@ -143,16 +143,13 @@ function setMoveEvents() {
     });
     
     //Touch events
-    var options = {
-        preventDefault: true
-    };
-    var mc = new Hammer(document.getElementById('field'), options);
+    // var options = {
+    //     preventDefault: true
+    // };
+    var mc = new Hammer(document.getElementById('field'));
     mc.get('swipe').set({ direction: Hammer.DIRECTION_ALL });
 
-    mc.on("swipeleft swipeup swiperight swipedown", function (ev) {
-
-        ev.preventDefault();
-
+    mc.on("swipeleft swipeup swiperight swipedown", function (ev) {        
         if (ev.type === 'swipeleft' && lastDirectionString !== 'right') {
             directionString = 'left';
         } else if (ev.type === 'swipeup' && lastDirectionString !== 'down') {
@@ -197,28 +194,28 @@ function setMoveEvents() {
     });
     
     //Press your finger on the screen to speed up snake
-    var pressFinger = new Hammer.Manager(document.getElementById('field'));
+    // var pressFinger = new Hammer.Manager(document.getElementById('field'));
 
-    pressFinger.add(new Hammer.Press({ event: 'press', time: 500 }));
+    // mc.add(new Hammer.Press({ event: 'press', time: 500 }));
 
-    pressFinger.on("press", function () {
-        speedUpSnake(200);        
-    });
+    // mc.on("press", function () {
+    //     speedUpSnake(200);        
+    // });
 
-    pressFinger.on("pressup", function () {
-        speedUpSnake(600);        
-    });
+    // mc.on("pressup", function () {
+    //     speedUpSnake(600);        
+    // });
     
-    //Double tab for break
-    pressFinger.add(new Hammer.Tap({ event: 'tap', taps: 1 }));
+    // //Double tab for break
+    // mc.add(new Hammer.Tap({ event: 'tap', taps: 1 }));
 
-    pressFinger.on("tap", function () {
-        if (stopMovingOfSnake) {
-            continueSnake();
-        } else {
-            pauseSnake();
-        }
-    });
+    // mc.on("tap", function () {
+    //     if (stopMovingOfSnake) {
+    //         continueSnake();
+    //     } else {
+    //         pauseSnake();
+    //     }
+    // });
 }
 
 //change the speed of the snake
