@@ -149,7 +149,9 @@ function setMoveEvents() {
     var mc = new Hammer(document.getElementById('field'), options);
     mc.get('swipe').set({ direction: Hammer.DIRECTION_ALL });
 
-    mc.on("swipeleft swipeup swiperight swipedown", function (ev) {        
+    mc.on("swipeleft swipeup swiperight swipedown", function (ev) {
+
+        ev.preventDefault();
 
         if (ev.type === 'swipeleft' && lastDirectionString !== 'right') {
             directionString = 'left';
@@ -200,13 +202,11 @@ function setMoveEvents() {
     pressFinger.add(new Hammer.Press({ event: 'press', time: 500 }));
 
     pressFinger.on("press", function () {
-        speedUpSnake(200);
-        console.log('press');
+        speedUpSnake(200);        
     });
 
     pressFinger.on("pressup", function () {
-        speedUpSnake(600);
-        console.log('press up');
+        speedUpSnake(600);        
     });
     
     //Double tab for break
