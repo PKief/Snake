@@ -205,6 +205,17 @@ function setMoveEvents() {
         speedUpSnake(600);
         console.log('press up');
     });
+    
+    //Double tab for break
+    pressFinger.add( new Hammer.Tap({ event: 'tap', taps: 1 }) );
+    
+    pressFinger.on("tap", function(){
+        if(stopMovingOfSnake){
+            continueSnake();
+        }else{
+            pauseSnake();
+        }        
+    });
 }
 
 //change the speed of the snake
