@@ -146,8 +146,7 @@ function setMoveEvents() {
     var mc = new Hammer(document.getElementById('field'));
     mc.get('swipe').set({ direction: Hammer.DIRECTION_ALL });
 
-    mc.on("swipeleft swipeup swiperight swipedown", function (ev) {
-        console.log(ev.type + " gesture detected.");
+    mc.on("swipeleft swipeup swiperight swipedown", function (ev) {        
 
         if (ev.type === 'swipeleft' && lastDirectionString !== 'right') {
             directionString = 'left';
@@ -164,32 +163,47 @@ function setMoveEvents() {
     var lastKeyUpAt = 0,
         $elem = $('body');
 
-    $elem.on('keydown', function(e) {
-        if(e.which === 37 && lastDirectionString === 'left'
-        || e.which === 38 && lastDirectionString === 'up'
-        || e.which === 39 && lastDirectionString === 'right'
-        || e.which === 40 && lastDirectionString === 'down'){
+    $elem.on('keydown', function (e) {
+        if (e.which === 37 && lastDirectionString === 'left'
+            || e.which === 38 && lastDirectionString === 'up'
+            || e.which === 39 && lastDirectionString === 'right'
+            || e.which === 40 && lastDirectionString === 'down') {
             // Set key down time to the current time
             var keyDownAt = new Date();
         
             // Use a timeout with 1000ms (this would be your x variable)
-            setTimeout(function() {
+            setTimeout(function () {
                 // Compare key down time with key up time
-                if (+keyDownAt > +lastKeyUpAt){
+                if (+keyDownAt > +lastKeyUpAt) {
                     // Key has been held down for x seconds
-                    speedUpSnake(200);                
+                    speedUpSnake(200);
                 }
-                else{
+                else {
                     // Key has not been held down for x seconds
-                    speedUpSnake(600);                
+                    speedUpSnake(600);
                 }
             }, 300);
         }
     });
-    
-    $elem.on('keyup', function() {
+
+    $elem.on('keyup', function () {
         // Set lastKeyUpAt to hold the time the last key up event was fired
         lastKeyUpAt = new Date();
+    });
+    
+    //Press your finger on the screen to speed up snake
+    var pressFinger = new Hammer.Manager(document.getElementById('field'));
+    
+    pressFinger.add(new Hammer.Press({ event: 'press', time: 500 }));
+    
+    pressFinger.on("press", function(){
+        speedUpSnake(200);
+        console.log('press');
+    });
+    
+    pressFinger.on("pressup", function(){
+        speedUpSnake(600);
+        console.log('press up');
     });
 }
 
@@ -231,7 +245,7 @@ function checkNewPosition() {
         if (head.position().top === part.position().top && head.position().left === part.position().left) {
             showInfoAlert('<h4>Game over!</h4><br/>Highscore: ' + snake.length + '<br/><br/><a href="#" onclick="location.reload();">Start new game!</a>');
             stopMovingOfSnake = true;
-            killSnake();          
+            killSnake();
         }
     }    
     
@@ -259,27 +273,27 @@ function pauseSnake() {
     showInfoAlert('Game paused');
 }
 function continueSnake() {
-    if(gameFinished) return false;
+    if (gameFinished) return false;
     stopMovingOfSnake = false;
     hideInfoAlert();
 }
 
-function killSnake(){ 
+function killSnake() {
     gameFinished = true;
-       
+
     $('.snake-tail').addClass('animated jello');
     $('.snake-head').addClass('animated jello');
-    
-    setTimeout(function(){
+
+    setTimeout(function () {
         $('.snake-tail').addClass('bounceOutLeft');
         $('.snake-head').addClass('bounceOutLeft');
     }, 400);
 }
 
-function showInfoAlert(text){
-    $('#infoAlert').html(text).show().addClass('bounceIn');    
+function showInfoAlert(text) {
+    $('#infoAlert').html(text).show().addClass('bounceIn');
 }
-function hideInfoAlert(){
+function hideInfoAlert() {
     $('#infoAlert').hide().removeClass('bounceIn');
 }
 
