@@ -193,29 +193,27 @@ function setMoveEvents() {
         lastKeyUpAt = new Date();
     });
     
-    //Press your finger on the screen to speed up snake
-    // var pressFinger = new Hammer.Manager(document.getElementById('field'));
+    //Press your finger on the screen to speed up snake    
+    mc.add(new Hammer.Press({ event: 'press', time: 500 }));
 
-    // mc.add(new Hammer.Press({ event: 'press', time: 500 }));
+    mc.on("press", function () {
+        speedUpSnake(200);        
+    });
 
-    // mc.on("press", function () {
-    //     speedUpSnake(200);        
-    // });
-
-    // mc.on("pressup", function () {
-    //     speedUpSnake(600);        
-    // });
+    mc.on("pressup", function () {
+        speedUpSnake(600);        
+    });
     
-    // //Double tab for break
-    // mc.add(new Hammer.Tap({ event: 'tap', taps: 1 }));
+    //Double tab for break
+    mc.add(new Hammer.Tap({ event: 'tap', taps: 1 }));
 
-    // mc.on("tap", function () {
-    //     if (stopMovingOfSnake) {
-    //         continueSnake();
-    //     } else {
-    //         pauseSnake();
-    //     }
-    // });
+    mc.on("tap", function () {
+        if (stopMovingOfSnake) {
+            continueSnake();
+        } else {
+            pauseSnake();
+        }
+    });
 }
 
 //change the speed of the snake
