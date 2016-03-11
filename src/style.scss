@@ -37,8 +37,8 @@ main{
     
     //General part of the snake
     @mixin item{
-        width: 3rem;
-        height: 3rem;
+        width: 2rem;
+        height: 2rem;
         background-color: #1976D2;
         position: absolute;                    
     }
@@ -47,12 +47,12 @@ main{
     .snake-head{
         @include item;
         background-color: #9CCC65;
-        z-index: 1;        
+        z-index: 1;                        
     }
     
     .snake-tail{
         @include item;
-        background-color: #fff;        
+        background-color: #fff;                
     }
     
     .food{
@@ -73,4 +73,10 @@ main{
     display: none;
     padding: .8rem;
     border: 2px solid #607D8B;
+    
+    a{
+        text-decoration: none;
+        color: green;
+        outline: none;
+    }
 }

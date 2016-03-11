@@ -29,21 +29,21 @@ main {
   overflow: hidden;
   z-index: 1; }
   #field .snake-head {
-    width: 3rem;
-    height: 3rem;
+    width: 2rem;
+    height: 2rem;
     background-color: #1976D2;
     position: absolute;
     background-color: #9CCC65;
     z-index: 1; }
   #field .snake-tail {
-    width: 3rem;
-    height: 3rem;
+    width: 2rem;
+    height: 2rem;
     background-color: #1976D2;
     position: absolute;
     background-color: #fff; }
   #field .food {
-    width: 3rem;
-    height: 3rem;
+    width: 2rem;
+    height: 2rem;
     background-color: #1976D2;
     position: absolute;
     background-color: #E91E63; }
@@ -60,3 +60,7 @@ main {
   display: none;
   padding: .8rem;
   border: 2px solid #607D8B; }
+  #infoAlert a {
+    text-decoration: none;
+    color: green;
+    outline: none; }

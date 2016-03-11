@@ -5,7 +5,7 @@ var lastDirectionString = null;
 var foodItems = [];
 var stopMovingOfSnake = false;
 var snake = [];
-var snakeSpeed = 600;
+var snakeSpeed = 400;
 
 var gameFinished = false;
 
@@ -14,9 +14,10 @@ var itemWidth = null;
 var itemHeight = null;
 
 $(function () {    
+    var fieldSize = 32;    
     //calculate the field width and height which is depending on the monitor resolution and the items
-    var width = (Math.round($(document).width() / 48) * 48) - 48;
-    var height = (Math.round($(document).height() / 48) * 48) - 48;
+    var width = (Math.round($(document).width() / fieldSize) * fieldSize) - fieldSize;
+    var height = (Math.round($(document).height() / fieldSize) * fieldSize) - fieldSize;
 
     var leftPos = ($(document).width() - width) / 2;
     var topPos = ($(document).height() - height) / 2;
@@ -48,7 +49,7 @@ function createSnake() {
     array_snake_parts.push(snake_head);        
     
     //Create the tail parts    
-    var amountOfPartsByDefault = 4;
+    var amountOfPartsByDefault = 8;
 
     for (var z = 0; z < amountOfPartsByDefault; z++) {
         var snake_tail = $('<div></div>', {
@@ -165,7 +166,7 @@ function setMoveEvents() {
     var lastKeyUpAt = 0,
         $elem = $('body');
 
-    $elem.on('keydown', function (e) {
+    $elem.on('keydown', function (e) {        
         if (e.which === 37 && lastDirectionString === 'left'
             || e.which === 38 && lastDirectionString === 'up'
             || e.which === 39 && lastDirectionString === 'right'
@@ -178,13 +179,13 @@ function setMoveEvents() {
                 // Compare key down time with key up time
                 if (+keyDownAt > +lastKeyUpAt) {
                     // Key has been held down for x seconds
-                    speedUpSnake(200);
+                    speedUpSnake(100);
                 }
                 else {
                     // Key has not been held down for x seconds
-                    speedUpSnake(600);
+                    speedUpSnake(400);
                 }
-            }, 300);
+            }, 100);
         }
     });
 
@@ -194,14 +195,14 @@ function setMoveEvents() {
     });
     
     //Press your finger on the screen to speed up snake    
-    mc.add(new Hammer.Press({ event: 'press', time: 500 }));
+    mc.add(new Hammer.Press({ event: 'press', time: 200 }));
 
     mc.on("press", function () {
-        speedUpSnake(200);        
+        speedUpSnake(100);        
     });
 
     mc.on("pressup", function () {
-        speedUpSnake(600);        
+        speedUpSnake(400);        
     });
     
     //Double tab for break
@@ -252,7 +253,9 @@ function checkNewPosition() {
     for (var z = 1; z < snake.length; z++) {
         var part = snake[z];
         if (head.position().top === part.position().top && head.position().left === part.position().left) {
-            showInfoAlert('<h4>Game over!</h4><br/>Highscore: ' + snake.length + '<br/><br/><a href="#" onclick="location.reload();">Start new game!</a>');
+            showInfoAlert('<h4>Game over!</h4><br/>Highscore: ' + snake.length + '<br/><br/><a href="#" onclick="location.reload();" onkeydown="javascript: if(event.keyCode == 13) location.reload();">Start new game!</a>');
+            //focus link for key event
+            $('#infoAlert a').focus();
             stopMovingOfSnake = true;
             killSnake();
         }
