@@ -86,3 +86,15 @@ Add this line for `Windows phones`. It prevents the user from seeing a tap anima
 
 More information: [http://hammerjs.github.io/](http://hammerjs.github.io/)
   
+## Getting started
+Install required node modules with this command:
+
+```
+npm install
+```
+
+Compile the Sass-Files with this command:
+
+```
+npm start
+```

@@ -14,4 +14,4 @@ gulp.task('watch_scss', function() {
 });
 
 
-gulp.task('default', ['watch_scss']);
+gulp.task('default', ['sass', 'watch_scss']);
