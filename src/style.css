@@ -63,4 +63,7 @@ main {
   #infoAlert a {
     text-decoration: none;
     color: green;
-    outline: none; }
+    outline: none;
+    transition: color ease .2s; }
+    #infoAlert a:hover {
+      color: #00ac00; }
