@@ -32,16 +32,16 @@ To speed up the snake you have to press one finger on the screen. If you release
 To be very efficient with the remaining space in the field you can also move the snake to the border of the field. If the snake reaches the border it will appear on the opposite side of the field. So you can quickly change the sides of the field, too.
 
 ## Implementation
-The game is implemented by JavaScript and uses the plugin jQuery. You can find the methods and the logic in the `snake.js`-file. 
+The game is implemented by JavaScript and uses the plugin jQuery. You can find the methods and the logic in the `snake.js` file. 
 
 ### Gulp
-I used gulp as my taskrunner. Gulp helps me to compile the styles, that are written in Sass, into browser readable CSS-files. Gulp also watches for file changes, if you edit and safe the file, gulp recompiles it. So you only have to refresh your browser.
+I used gulp as my taskrunner. Gulp helps me to compile the styles, that are written in Sass, into browser readable CSS files. Gulp also watches for file changes, if you edit and safe the file, gulp recompiles it. So you only have to refresh your browser.
 
 More information: http://gulpjs.com/
 
 ### Animate.css
-Animate.css is a very nice css-File which is used to add some nice animations to the elements.
-You only have to bind in the `animate.css`-file into the html and add some class names to your element which should be animated. You need to add the class `animated` and also the classname of the animation, e.g. `fadeIn`:
+Animate.css is a very nice css file which is used to add some nice animations to the elements.
+You only have to bind in the `animate.css` file into the html and add some class names to your element which should be animated. You need to add the class `animated` and also the classname of the animation, e.g. `fadeIn`:
 
 ```html
 <div class="animated fadeIn"></div>
@@ -53,7 +53,7 @@ More information: https://daneden.github.io/animate.css/
 
 ### Hammer.js
 Hammer.js is a very nice framework to implement some touch events for mobile devices. 
-It is also very simple to use: Bind in the `hammer.min.js`-file into your html and initialize the hammer component like this:
+It is also very simple to use: Bind in the `hammer.min.js` file into your html and initialize the hammer component like this:
 
 ```js
 var mc = new Hammer(document.getElementById('field'));
@@ -93,8 +93,10 @@ Install required node modules with this command:
 npm install
 ```
 
-Compile the Sass-Files with this command:
+Compile the Sass files with this command:
 
 ```
 npm start
 ```
+
+Open the `index.html` file in your browser.
