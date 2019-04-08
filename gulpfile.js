@@ -1,17 +1,19 @@
 'use strict';
 
-var gulp = require('gulp'),            
-    sass = require('gulp-sass');    
+const gulp = require('gulp'),
+  sass = require('gulp-sass');
 
-gulp.task('sass', function () {
+const scss = (cb) => {
   gulp.src('src/*.scss')
     .pipe(sass.sync().on('error', sass.logError))
-    .pipe(gulp.dest('src'));    
-});
+    .pipe(gulp.dest('src'));
+  cb();
+};
 
-gulp.task('watch_scss', function() {  
-  gulp.watch('src/*.scss', ['sass']);
-});
+const watch_scss = (cb) => {
+  gulp.watch('src/*.scss', scss);
+  cb();
+};
 
 
-gulp.task('default', ['sass', 'watch_scss']);
+gulp.task('default', gulp.series(scss, watch_scss));
