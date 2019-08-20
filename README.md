@@ -1,5 +1,5 @@
 # Snake
-![alt text](./img/snake.jpg "Snake")
+![Preview image](./img/snake.jpg "Snake")
 
 Play: [http://pkief.github.io/Snake](http://pkief.github.io/Snake)
 
@@ -32,7 +32,7 @@ To speed up the snake you have to press one finger on the screen. If you release
 To be very efficient with the remaining space in the field you can also move the snake to the border of the field. If the snake reaches the border it will appear on the opposite side of the field. So you can quickly change the sides of the field, too.
 
 ## Implementation
-The game is implemented by JavaScript and uses the plugin jQuery. You can find the methods and the logic in the `snake.js` file. 
+The game is implemented by JavaScript and uses the plugin jQuery. You can find the methods and the logic in the `snake.js` file.
 
 ### Gulp
 I used gulp as my taskrunner. Gulp helps me to compile the styles, that are written in Sass, into browser readable CSS files. Gulp also watches for file changes, if you edit and safe the file, gulp recompiles it. So you only have to refresh your browser.
@@ -52,7 +52,7 @@ I used the effect to show the info alert when a player pauses his game or show t
 More information: https://daneden.github.io/animate.css/
 
 ### Hammer.js
-Hammer.js is a very nice framework to implement some touch events for mobile devices. 
+Hammer.js is a very nice framework to implement some touch events for mobile devices.
 It is also very simple to use: Bind in the `hammer.min.js` file into your html and initialize the hammer component like this:
 
 ```js
@@ -70,7 +70,7 @@ To swipe in all directions (left, up, right, down) you need to add this line:
 
 ```js
 mc.get('swipe').set({ direction: Hammer.DIRECTION_ALL });
-``` 
+```
 
 For a better experience in the browsers of mobile devices you can add the following line to suppress the scrolling and scaling in the browser while swiping or something else:
 
@@ -85,7 +85,7 @@ Add this line for `Windows phones`. It prevents the user from seeing a tap anima
 ```
 
 More information: [http://hammerjs.github.io/](http://hammerjs.github.io/)
-  
+
 ## Getting started
 Install required node modules with this command:
 
