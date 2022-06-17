@@ -32,7 +32,7 @@ To speed up the snake you have to press one finger on the screen. If you release
 To be very efficient with the remaining space in the field you can also move the snake to the border of the field. If the snake reaches the border it will appear on the opposite side of the field. So you can quickly change the sides of the field, too.
 
 ## Local development
-The game is implemented by JavaScript and uses the plugin jQuery. You can find the methods and the logic in the `snake.js` file.
+The game is implemented by JavaScript and uses the plugin jQuery. You can find the methods and the logic in the `src/main.js` file.
 
 ### Getting started
 Install required node modules with this command:
@@ -41,10 +41,9 @@ Install required node modules with this command:
 npm install
 ```
 
-Compile the Sass files with this command:
+Run the app with this command:
 
 ```
 npm start
 ```
 
-Open the `index.html` file in your browser.
