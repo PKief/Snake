@@ -1,6 +1,8 @@
 import FaviconsWebpackPlugin from 'favicons-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import SveltePreprocess from 'svelte-preprocess';
+import Autoprefixer from 'autoprefixer';
 import { resolve } from 'path';
 import {
   Configuration,
@@ -11,10 +13,15 @@ const devMode = process.env.NODE_ENV !== 'production';
 
 const config: Configuration = {
   mode: 'development',
-  entry: ['./main.js'],
+  entry: ['./main.ts'],
   context: resolve(__dirname, '../src'),
   resolve: {
-    extensions: ['', '.js', '.scss'],
+    alias: {
+      // Note: Later in this config file, we'll automatically add paths from `tsconfig.compilerOptions.paths`
+      svelte: resolve('node_modules', 'svelte'),
+    },
+    extensions: ['.mjs', '.js', '.ts', '.svelte', 'scss'],
+    mainFields: ['svelte', 'browser', 'module', 'main'],
   },
   output: {
     path: resolve(__dirname, '../dist'),
@@ -23,6 +30,42 @@ const config: Configuration = {
   },
   module: {
     rules: [
+      // Rule: Svelte
+      {
+        test: /\.svelte$/,
+        use: {
+          loader: 'svelte-loader',
+          options: {
+            compilerOptions: {
+              // Dev mode must be enabled for HMR to work!
+              dev: devMode,
+            },
+            emitCss: !devMode,
+            hotReload: devMode,
+            hotOptions: {
+              // List of options and defaults: https://www.npmjs.com/package/svelte-loader-hot#usage
+              noPreserveState: false,
+              optimistic: true,
+            },
+            preprocess: SveltePreprocess({
+              scss: true,
+              sass: true,
+              postcss: {
+                plugins: [Autoprefixer],
+              },
+            }),
+          },
+        },
+      },
+
+      // Required to prevent errors from Svelte on Webpack 5+, omit on Webpack 4
+      // See: https://github.com/sveltejs/svelte-loader#usage
+      {
+        test: /node_modules\/svelte\/.*\.mjs$/,
+        resolve: {
+          fullySpecified: false,
+        },
+      },
       {
         test: /\.tsx?$/,
         use: 'ts-loader',
@@ -48,19 +91,19 @@ const config: Configuration = {
     ],
   },
   plugins: [
-    new HotModuleReplacementPlugin(),
-    new ProvidePlugin({
-      $: 'jquery',
-      jQuery: 'jquery',
-      Hammer: 'hammerjs/hammer',
-    }),
-    new FaviconsWebpackPlugin({
-      logo: './img/logo.png',
-    }),
+    // new HotModuleReplacementPlugin(),
+    // new ProvidePlugin({
+    //   $: 'jquery',
+    //   jQuery: 'jquery',
+    //   Hammer: 'hammerjs/hammer',
+    // }),
+    // new FaviconsWebpackPlugin({
+    //   logo: './img/logo.png',
+    // }),
     new HtmlWebpackPlugin({
       inject: true,
       title: 'Snake',
-      template: `index.ejs`,
+      // template: `index.ejs`,
       hash: true,
       meta: {
         viewport:

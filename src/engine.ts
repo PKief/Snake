@@ -48,16 +48,16 @@ class Snake {
   move(): void {
     switch (this.direction) {
       case 'up':
-        this.position.y--;
+        this.position = new Position(this.position.x, this.position.y - 1);
         break;
       case 'down':
-        this.position.y++;
+        this.position = new Position(this.position.x, this.position.y + 1);
         break;
       case 'left':
-        this.position.x--;
+        this.position = new Position(this.position.x - 1, this.position.y);
         break;
       case 'right':
-        this.position.x++;
+        this.position = new Position(this.position.x + 1, this.position.y);
         break;
     }
   }
@@ -68,7 +68,7 @@ type GameConfig = {
   y: number;
 };
 
-class Game {
+export class Game {
   config: GameConfig;
   gameOver: boolean;
   score: number;
@@ -105,6 +105,7 @@ class Game {
 
   start(): void {
     this.intervalSubscription = this.interval$.subscribe(() => {
+      console.log(this.snake.position);
       this.snake.move();
       if (
         this.snake.position.x === this.mouse.position.x &&
@@ -116,6 +117,7 @@ class Game {
       }
       if (this.snake.position.x < 0 || this.snake.position.x >= this.config.x) {
         this.gameOver = true;
+        this.stop();
       } else if (
         this.snake.position.y < 0 ||
         this.snake.position.y >= this.config.y
@@ -137,8 +139,3 @@ class Game {
     );
   }
 }
-
-window.addEventListener('load', () => {
-  const game = new Game({ x: 4, y: 4 });
-  console.log('Hello World');
-});
