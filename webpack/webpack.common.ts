@@ -1,68 +1,72 @@
-import FaviconsWebpackPlugin from "favicons-webpack-plugin";
-import HtmlWebpackPlugin from "html-webpack-plugin";
-import MiniCssExtractPlugin from "mini-css-extract-plugin";
-import { resolve } from "path";
+import FaviconsWebpackPlugin from 'favicons-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import { resolve } from 'path';
 import {
   Configuration,
   HotModuleReplacementPlugin,
   ProvidePlugin,
-} from "webpack";
-const devMode = process.env.NODE_ENV !== "production";
+} from 'webpack';
+const devMode = process.env.NODE_ENV !== 'production';
 
 const config: Configuration = {
-  mode: "development",
-  entry: ["./main.js"],
-  context: resolve(__dirname, "../src"),
+  mode: 'development',
+  entry: ['./main.js'],
+  context: resolve(__dirname, '../src'),
   resolve: {
-    extensions: ["", ".js", ".scss"],
+    extensions: ['', '.js', '.scss'],
   },
   output: {
-    path: resolve(__dirname, "../dist"),
-    filename: "index.js",
+    path: resolve(__dirname, '../dist'),
+    filename: 'index.js',
     clean: true,
   },
   module: {
     rules: [
       {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
+      {
         test: /\.(sa|sc|c)ss$/i,
         use: [
-          devMode ? "style-loader" : MiniCssExtractPlugin.loader,
-          "css-loader",
-          "sass-loader",
+          devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
+          'css-loader',
+          'sass-loader',
         ],
       },
       {
         test: /\.css$/i,
-        use: ["style-loader", "css-loader"],
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.(png|jpe?g|gif|svg|eot|ttf|woff|woff2)$/i,
         // More information here https://webpack.js.org/guides/asset-modules/
-        type: "asset",
+        type: 'asset',
       },
     ],
   },
   plugins: [
     new HotModuleReplacementPlugin(),
     new ProvidePlugin({
-      $: "jquery",
-      jQuery: "jquery",
-      Hammer: "hammerjs/hammer",
+      $: 'jquery',
+      jQuery: 'jquery',
+      Hammer: 'hammerjs/hammer',
     }),
     new FaviconsWebpackPlugin({
-      // Your source logo (required)
-      logo: "./img/logo.png",
+      logo: './img/logo.png',
     }),
     new HtmlWebpackPlugin({
       inject: true,
-      title: "Snake",
+      title: 'Snake',
       template: `index.ejs`,
       hash: true,
       meta: {
         viewport:
-          "user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1",
+          'user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1',
       },
-      favicon: "img/favicon.ico",
+      favicon: 'img/favicon.ico',
     }),
     new MiniCssExtractPlugin(),
   ],
