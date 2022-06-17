@@ -1,3 +1,5 @@
+import "./styles/styles.scss";
+
 //direction in which the snake is moving
 var directionString = 'right';
 var lastDirectionString = null;
