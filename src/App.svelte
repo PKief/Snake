@@ -1,20 +1,32 @@
 <script lang="ts">
-  import { Game } from './engine';
-  const game = new Game({ x: 10, y: 10 });
+  import { Game } from './game';
+  import './styles/styles.scss';
 
-  function startGame() {
+  const game = new Game({ x: 10, y: 10 });
+  const gameState = game.gameState;
+
+  const startGame = () => {
     game.start();
-  }
+  };
 </script>
 
+<header>
+  <p>State: {$gameState.status}</p>
+  <p>gameOver: {$gameState.gameOver}</p>
+  <p>Score: {$gameState.score}</p>
+</header>
 <main>
-  {#each { length: game.config.y } as _, yi}
+  {#each $gameState.fields as row}
     <div class="row">
-      {#each { length: game.config.x } as _, xi}
-        {#if xi === game.snake.position.x && yi === game.snake.position.y}
+      {#each row as field}
+        {#if field === 'SnakeHead'}
           <div class="field">*</div>
-        {:else}
+        {:else if field === 'SnakeBody'}
+          <div class="field">o</div>
+        {:else if field === 'Field'}
           <div class="field" />
+        {:else if field === 'Mouse'}
+          <div class="field">x</div>
         {/if}
       {/each}
     </div>
