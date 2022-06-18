@@ -1,4 +1,14 @@
-import { BehaviorSubject, fromEvent, interval, Subscription } from 'rxjs';
+import {
+  BehaviorSubject,
+  defer,
+  filter,
+  fromEvent,
+  interval,
+  map,
+  share,
+  Subscription,
+  withLatestFrom,
+} from 'rxjs';
 import { Mouse } from './mouse';
 import { Position } from './position';
 import { Snake } from './snake';
@@ -9,6 +19,7 @@ export class Game {
   mouse: Mouse;
   snake: Snake;
   gameState: BehaviorSubject<GameState>;
+  paused = new BehaviorSubject<boolean>(false);
 
   private readonly interval$ = interval(1000);
   private intervalSubscription: Subscription | undefined;
@@ -46,47 +57,72 @@ export class Game {
   start(): void {
     this.gameState.next({
       ...this.gameState.value,
-      status: 'started',
+      status: 'playing',
     });
     this.generateRandomMousePosition();
 
-    this.intervalSubscription = this.interval$.subscribe(() => {
-      this.snake.move();
+    this.intervalSubscription = this.getPausableTimer(this.paused).subscribe(
+      () => {
+        this.snake.move();
 
-      const snakeHitsWall =
-        this.snake.head.x < 0 ||
-        this.snake.head.x >= this.config.x ||
-        this.snake.head.y < 0 ||
-        this.snake.head.y >= this.config.y;
+        const snakeHitsWall =
+          this.snake.head.x < 0 ||
+          this.snake.head.x >= this.config.x ||
+          this.snake.head.y < 0 ||
+          this.snake.head.y >= this.config.y;
 
-      const snakeBitesItself = this.snake.parts.some(
-        (part, index) =>
-          part.x === this.snake.head.x &&
-          part.y === this.snake.head.y &&
-          index > 0
-      );
+        const snakeBitesItself = this.snake.parts.some(
+          (part, index) =>
+            part.x === this.snake.head.x &&
+            part.y === this.snake.head.y &&
+            index > 0
+        );
 
-      if (snakeHitsWall || snakeBitesItself) {
-        this.stop();
-        this.endGame();
-        return;
+        if (snakeHitsWall || snakeBitesItself) {
+          this.endGame();
+          return;
+        }
+
+        const snakeHitsMouse =
+          this.snake.head.x === this.mouse.position.x &&
+          this.snake.head.y === this.mouse.position.y;
+
+        if (snakeHitsMouse) {
+          this.snake.eatMouse();
+          this.updateScore(1);
+          this.generateRandomMousePosition();
+        }
+
+        this.rerender();
       }
+    );
+  }
 
-      const snakeHitsMouse =
-        this.snake.head.x === this.mouse.position.x &&
-        this.snake.head.y === this.mouse.position.y;
-
-      if (snakeHitsMouse) {
-        this.snake.eatMouse();
-        this.updateScore(1);
-        this.generateRandomMousePosition();
-      }
-
-      this.rerender();
+  pause(): void {
+    this.paused.next(true);
+    this.gameState.next({
+      ...this.gameState.value,
+      status: 'paused',
     });
   }
 
-  stop(): void {
+  endPause(): void {
+    this.paused.next(false);
+    this.gameState.next({
+      ...this.gameState.value,
+      status: 'playing',
+    });
+  }
+
+  restart(): void {
+    this.stop();
+    this.snake = new Snake(new Position(1, 1), 3);
+    this.mouse = new Mouse(new Position(0, 0));
+    this.updateScore(0);
+    this.start();
+  }
+
+  private stop(): void {
     this.gameState.next({
       ...this.gameState.value,
       status: 'stopped',
@@ -109,6 +145,7 @@ export class Game {
   }
 
   private endGame() {
+    this.stop();
     this.gameState.next({
       ...this.gameState.value,
       gameOver: true,
@@ -130,6 +167,17 @@ export class Game {
     }
 
     return gameFields;
+  }
+
+  private getPausableTimer(pause: BehaviorSubject<boolean>) {
+    return defer(() => {
+      let seconds = 1;
+      return interval(1000).pipe(
+        withLatestFrom(pause),
+        filter(([v, paused]) => !paused),
+        map(() => seconds++)
+      );
+    }).pipe(share());
   }
 
   private generateRandomMousePosition() {

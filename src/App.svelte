@@ -8,6 +8,18 @@
   const startGame = () => {
     game.start();
   };
+
+  const restartGame = () => {
+    game.restart();
+  };
+
+  const pauseGame = () => {
+    game.pause();
+  };
+
+  const endPause = () => {
+    game.endPause();
+  };
 </script>
 
 <header>
@@ -32,7 +44,18 @@
     </div>
   {/each}
 
-  <button on:click={startGame}> Start game </button>
+  {#if $gameState.gameOver}
+    <button on:click={restartGame}>Restart</button>
+  {:else if $gameState.status === 'stopped'}
+    <button on:click={startGame}>Start</button>
+  {/if}
+  {#if $gameState.status === 'playing'}
+    <button on:click={pauseGame}>Pause</button>
+  {/if}
+
+  {#if $gameState.status === 'paused'}
+    <button on:click={endPause}>Continue</button>
+  {/if}
 </main>
 
 <style lang="scss">
