@@ -1,6 +1,6 @@
 import { Position } from './position';
 
-export class Mouse {
+export class Food {
   position: Position;
 
   constructor(position: Position) {

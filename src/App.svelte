@@ -31,15 +31,19 @@
   {#each $gameState.fields as row}
     <div class="row">
       {#each row as field}
-        {#if field === 'SnakeHead'}
-          <div class="field">*</div>
-        {:else if field === 'SnakeBody'}
-          <div class="field">o</div>
-        {:else if field === 'Field'}
-          <div class="field" />
-        {:else if field === 'Mouse'}
-          <div class="field">x</div>
-        {/if}
+        <div class="field">
+          {#if field === 'SnakeHead'}
+            <div class="snake-head">O</div>
+          {:else if field === 'SnakeBody'}
+            <div class="snake-body">o</div>
+          {:else if field === 'SnakeTail'}
+            <div class="snake-tail">-</div>
+          {:else if field === 'Food'}
+            <div class="food">🍎</div>
+          {:else}
+            <div class="empty" />
+          {/if}
+        </div>
       {/each}
     </div>
   {/each}

@@ -10,12 +10,16 @@ export class Snake {
     return this.parts[0];
   }
 
+  get tail(): Position {
+    return this.parts[this.parts.length - 1];
+  }
+
   constructor(startPosition: Position, size?: number) {
     this.size = size;
     this.generateParts(startPosition);
   }
 
-  eatMouse(): void {
+  eatFood(): void {
     this.size++;
     this.parts.push(this.parts[this.parts.length - 1]);
   }

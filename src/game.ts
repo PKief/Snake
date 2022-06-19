@@ -1,5 +1,5 @@
 import { BehaviorSubject, fromEvent, Subscription } from 'rxjs';
-import { Mouse } from './mouse';
+import { Food } from './food';
 import { Position } from './position';
 import { Snake } from './snake';
 import { GameConfig, GameFieldType, GameState } from './types';
@@ -7,7 +7,7 @@ import { createPausableTimer } from './utils';
 
 export class Game {
   config: GameConfig;
-  mouse: Mouse;
+  food: Food;
   snake: Snake;
   gameState: BehaviorSubject<GameState>;
   paused = new BehaviorSubject<boolean>(false);
@@ -17,7 +17,7 @@ export class Game {
 
   constructor(config: GameConfig) {
     this.snake = new Snake(new Position(1, 1), 3);
-    this.mouse = new Mouse(new Position(0, 0));
+    this.food = new Food(new Position(0, 0));
     this.config = config;
     this.gameState = new BehaviorSubject<GameState>({
       fields: [],
@@ -49,7 +49,7 @@ export class Game {
       ...this.gameState.value,
       status: 'playing',
     });
-    this.generateRandomMousePosition();
+    this.generateRandomFoodPosition();
 
     this.intervalSubscription = createPausableTimer(this.paused).subscribe(
       () => {
@@ -73,14 +73,14 @@ export class Game {
           return;
         }
 
-        const snakeHitsMouse =
-          this.snake.head.x === this.mouse.position.x &&
-          this.snake.head.y === this.mouse.position.y;
+        const snakeHitsFood =
+          this.snake.head.x === this.food.position.x &&
+          this.snake.head.y === this.food.position.y;
 
-        if (snakeHitsMouse) {
-          this.snake.eatMouse();
+        if (snakeHitsFood) {
+          this.snake.eatFood();
           this.updateScore(1);
-          this.generateRandomMousePosition();
+          this.generateRandomFoodPosition();
         }
 
         this.rerender();
@@ -107,7 +107,7 @@ export class Game {
   restart(): void {
     this.stop();
     this.snake = new Snake(new Position(1, 1), 3);
-    this.mouse = new Mouse(new Position(0, 0));
+    this.food = new Food(new Position(0, 0));
     this.updateScore(0);
     this.start();
   }
@@ -150,28 +150,34 @@ export class Game {
         gameFields[y][x] = 'Field';
       }
     }
-    gameFields[this.mouse.position.y][this.mouse.position.x] = 'Mouse';
-    gameFields[this.snake.head.y][this.snake.head.x] = 'SnakeHead';
-    for (const bodyPart of this.snake.parts.slice(1)) {
-      gameFields[bodyPart.y][bodyPart.x] = 'SnakeBody';
+    gameFields[this.food.position.y][this.food.position.x] = 'Food';
+
+    for (let i = 0; i < this.snake.parts.length; i++) {
+      const part = this.snake.parts[i];
+      gameFields[part.y][part.x] =
+        i === 0
+          ? 'SnakeHead'
+          : i === this.snake.parts.length - 1
+          ? 'SnakeTail'
+          : 'SnakeBody';
     }
 
     return gameFields;
   }
 
-  private generateRandomMousePosition() {
-    const lastMousePosition = this.mouse.position;
+  private generateRandomFoodPosition() {
+    const lastFoodPosition = this.food.position;
     while (true) {
       const x = Math.floor(Math.random() * this.config.x);
       const y = Math.floor(Math.random() * this.config.y);
       const noPositionConflictsWithSnake = this.snake.parts.every(
         (part) => part.x !== x || part.y !== y
       );
-      const notLastMousePosition =
-        lastMousePosition.x !== x || lastMousePosition.y !== y;
+      const notLastFoodPosition =
+        lastFoodPosition.x !== x || lastFoodPosition.y !== y;
 
-      if (noPositionConflictsWithSnake && notLastMousePosition) {
-        this.mouse.position = new Position(x, y);
+      if (noPositionConflictsWithSnake && notLastFoodPosition) {
+        this.food.position = new Position(x, y);
         break;
       }
     }

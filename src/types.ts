@@ -12,4 +12,9 @@ export type GameState = {
   status: 'playing' | 'stopped' | 'paused';
 };
 
-export type GameFieldType = 'Field' | 'Mouse' | 'SnakeHead' | 'SnakeBody';
+export type GameFieldType =
+  | 'Field'
+  | 'Food'
+  | 'SnakeHead'
+  | 'SnakeBody'
+  | 'SnakeTail';

@@ -26,6 +26,16 @@ body {
     height: 2rem;
     background-color: #a5e270;
     margin: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .snake-head {
+      background: red;
+      border-radius: 50%;
+      width: 50%;
+      height: 50%;
+    }
   }
 
   &:nth-child(odd) .field:nth-child(even) {
