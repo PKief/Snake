@@ -1,18 +1,9 @@
-import {
-  BehaviorSubject,
-  defer,
-  filter,
-  fromEvent,
-  interval,
-  map,
-  share,
-  Subscription,
-  withLatestFrom,
-} from 'rxjs';
+import { BehaviorSubject, fromEvent, Subscription } from 'rxjs';
 import { Mouse } from './mouse';
 import { Position } from './position';
 import { Snake } from './snake';
 import { GameConfig, GameFieldType, GameState } from './types';
+import { createPausableTimer } from './utils';
 
 export class Game {
   config: GameConfig;
@@ -21,7 +12,6 @@ export class Game {
   gameState: BehaviorSubject<GameState>;
   paused = new BehaviorSubject<boolean>(false);
 
-  private readonly interval$ = interval(1000);
   private intervalSubscription: Subscription | undefined;
   private readonly keyPress$ = fromEvent<KeyboardEvent>(document, 'keyup');
 
@@ -61,7 +51,7 @@ export class Game {
     });
     this.generateRandomMousePosition();
 
-    this.intervalSubscription = this.getPausableTimer(this.paused).subscribe(
+    this.intervalSubscription = createPausableTimer(this.paused).subscribe(
       () => {
         this.snake.move();
 
@@ -169,25 +159,18 @@ export class Game {
     return gameFields;
   }
 
-  private getPausableTimer(pause: BehaviorSubject<boolean>) {
-    return defer(() => {
-      let seconds = 1;
-      return interval(1000).pipe(
-        withLatestFrom(pause),
-        filter(([v, paused]) => !paused),
-        map(() => seconds++)
-      );
-    }).pipe(share());
-  }
-
   private generateRandomMousePosition() {
+    const lastMousePosition = this.mouse.position;
     while (true) {
       const x = Math.floor(Math.random() * this.config.x);
       const y = Math.floor(Math.random() * this.config.y);
       const noPositionConflictsWithSnake = this.snake.parts.every(
         (part) => part.x !== x || part.y !== y
       );
-      if (noPositionConflictsWithSnake) {
+      const notLastMousePosition =
+        lastMousePosition.x !== x || lastMousePosition.y !== y;
+
+      if (noPositionConflictsWithSnake && notLastMousePosition) {
         this.mouse.position = new Position(x, y);
         break;
       }

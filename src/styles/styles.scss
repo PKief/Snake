@@ -24,7 +24,14 @@ body {
   .field {
     width: 2rem;
     height: 2rem;
-    background-color: #1976d2;
+    background-color: #a5e270;
     margin: 2px;
+  }
+
+  &:nth-child(odd) .field:nth-child(even) {
+    background: rgb(198 239 167);
+  }
+  &:nth-child(even) .field:nth-child(odd) {
+    background: rgb(198 239 167);
   }
 }

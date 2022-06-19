@@ -23,9 +23,9 @@
 </script>
 
 <header>
-  <p>State: {$gameState.status}</p>
-  <p>gameOver: {$gameState.gameOver}</p>
-  <p>Score: {$gameState.score}</p>
+  <span>State: {$gameState.status}</span>
+  <span>gameOver: {$gameState.gameOver}</span>
+  <span>Score: {$gameState.score}</span>
 </header>
 <main>
   {#each $gameState.fields as row}
