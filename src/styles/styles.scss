@@ -1,4 +1,6 @@
-@import '~animate.css/source/animate.css';
+@import '~svelte-material-ui/bare.css';
+@import 'material-icons/iconfont/material-icons.css';
+@import '../theme/dark/smui-theme';
 
 body,
 html {
@@ -11,8 +13,19 @@ html {
   box-sizing: border-box;
 }
 
-body {
-  background-color: #eee;
+header {
+  display: flex;
+  flex-direction: row;
+  justify-items: center;
+  align-items: center;
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.status-bar {
+  background-color: #263238;
+  padding: 0.5rem 1rem;
 }
 
 .row {
@@ -31,10 +44,24 @@ body {
     align-items: center;
 
     .snake-head {
-      background: red;
+      background: rgb(0, 0, 0);
       border-radius: 50%;
       width: 50%;
       height: 50%;
+    }
+
+    .snake-body {
+      background: rgb(0, 0, 0);
+      border-radius: 50%;
+      width: 40%;
+      height: 40%;
+    }
+
+    .snake-tail {
+      background: rgb(0, 0, 0);
+      border-radius: 50%;
+      width: 20%;
+      height: 20%;
     }
   }
 

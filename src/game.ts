@@ -23,7 +23,7 @@ export class Game {
       fields: [],
       gameOver: false,
       score: 0,
-      status: 'stopped',
+      status: 'initial',
     });
 
     this.keyPress$.subscribe((event: KeyboardEvent) => {
@@ -48,6 +48,7 @@ export class Game {
     this.gameState.next({
       ...this.gameState.value,
       status: 'playing',
+      gameOver: false,
     });
     this.generateRandomFoodPosition();
 

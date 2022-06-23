@@ -9,7 +9,7 @@ export type GameState = {
   fields: GameFieldType[][];
   score: number;
   gameOver: boolean;
-  status: 'playing' | 'stopped' | 'paused';
+  status: 'playing' | 'stopped' | 'paused' | 'initial';
 };
 
 export type GameFieldType =

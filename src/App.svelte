@@ -1,4 +1,6 @@
 <script lang="ts">
+  import IconButton from '@smui/icon-button';
+  import TopAppBar, { Row, Section, Title } from '@smui/top-app-bar';
   import { Game } from './game';
   import './styles/styles.scss';
 
@@ -23,21 +25,41 @@
 </script>
 
 <header>
+  <Title>Snake</Title>
+  {#if $gameState.status === 'playing'}
+    <IconButton class="material-icons" on:click={pauseGame}>pause</IconButton>
+  {:else if $gameState.status === 'paused'}
+    <IconButton class="material-icons" on:click={endPause}
+      >play_arrow</IconButton
+    >
+  {:else if $gameState.status === 'stopped'}
+    <IconButton class="material-icons" on:click={restartGame}>replay</IconButton
+    >
+  {:else if $gameState.status === 'initial'}
+    <IconButton class="material-icons" on:click={startGame}
+      >play_arrow</IconButton
+    >
+  {/if}
+  <IconButton class="material-icons">share</IconButton>
+</header>
+
+<div class="status-bar">
   <span>State: {$gameState.status}</span>
   <span>gameOver: {$gameState.gameOver}</span>
   <span>Score: {$gameState.score}</span>
-</header>
+</div>
+
 <main>
   {#each $gameState.fields as row}
     <div class="row">
       {#each row as field}
         <div class="field">
           {#if field === 'SnakeHead'}
-            <div class="snake-head">O</div>
+            <div class="snake-head" />
           {:else if field === 'SnakeBody'}
-            <div class="snake-body">o</div>
+            <div class="snake-body" />
           {:else if field === 'SnakeTail'}
-            <div class="snake-tail">-</div>
+            <div class="snake-tail" />
           {:else if field === 'Food'}
             <div class="food">🍎</div>
           {:else}
@@ -47,19 +69,6 @@
       {/each}
     </div>
   {/each}
-
-  {#if $gameState.gameOver}
-    <button on:click={restartGame}>Restart</button>
-  {:else if $gameState.status === 'stopped'}
-    <button on:click={startGame}>Start</button>
-  {/if}
-  {#if $gameState.status === 'playing'}
-    <button on:click={pauseGame}>Pause</button>
-  {/if}
-
-  {#if $gameState.status === 'paused'}
-    <button on:click={endPause}>Continue</button>
-  {/if}
 </main>
 
 <style lang="scss">
