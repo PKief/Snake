@@ -13,6 +13,7 @@
   "author": "Philipp Kief",
   "license": "MIT",
   "devDependencies": {
+    "@types/node": "^18.0.0",
     "@typescript-eslint/eslint-plugin": "^5.26.0",
     "@typescript-eslint/parser": "^5.26.0",
     "autoprefixer": "^10.4.7",
@@ -26,7 +27,7 @@
     "html-webpack-plugin": "^5.5.0",
     "mini-css-extract-plugin": "^2.6.1",
     "prettier": "^2.6.2",
-    "sass": "^1.52.3",
+    "sass": "^1.53.0",
     "sass-loader": "^13.0.0",
     "smui-theme": "^6.0.0-beta.16",
     "style-loader": "^3.3.1",

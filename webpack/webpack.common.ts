@@ -1,14 +1,10 @@
-import FaviconsWebpackPlugin from 'favicons-webpack-plugin';
+import Autoprefixer from 'autoprefixer';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import SveltePreprocess from 'svelte-preprocess';
-import Autoprefixer from 'autoprefixer';
 import { resolve } from 'path';
-import {
-  Configuration,
-  HotModuleReplacementPlugin,
-  ProvidePlugin,
-} from 'webpack';
+import SveltePreprocess from 'svelte-preprocess';
+import { Configuration } from 'webpack';
+
 const devMode = process.env.NODE_ENV !== 'production';
 
 const config: Configuration = {
@@ -92,18 +88,12 @@ const config: Configuration = {
   },
   plugins: [
     // new HotModuleReplacementPlugin(),
-    // new ProvidePlugin({
-    //   $: 'jquery',
-    //   jQuery: 'jquery',
-    //   Hammer: 'hammerjs/hammer',
-    // }),
     // new FaviconsWebpackPlugin({
     //   logo: './img/logo.png',
     // }),
     new HtmlWebpackPlugin({
       inject: true,
       title: 'Snake',
-      // template: `index.ejs`,
       hash: true,
       meta: {
         viewport:
