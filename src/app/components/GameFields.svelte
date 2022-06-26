@@ -22,7 +22,7 @@
   </div>
 {/each}
 
-<style>
+<style lang="scss">
   .row {
     display: flex;
     flex-direction: row;
