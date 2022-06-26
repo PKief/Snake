@@ -1,11 +1,12 @@
 <script lang="ts">
   import IconButton from '@smui/icon-button';
-  import TopAppBar, { Row, Section, Title } from '@smui/top-app-bar';
-  import { Game } from './game';
-  import './styles/styles.scss';
+  import { Title } from '@smui/top-app-bar';
+  import '../../styles/styles.scss';
+  import { Game } from '../game';
+  import StatusBar from './StatusBar.svelte';
+  import { gameState } from '../stores';
 
-  const game = new Game({ x: 10, y: 10 });
-  const gameState = game.gameState;
+  const game = new Game({ x: 6, y: 8 });
 
   const startGame = () => {
     game.start();
@@ -43,11 +44,7 @@
   <IconButton class="material-icons">share</IconButton>
 </header>
 
-<div class="status-bar">
-  <span>State: {$gameState.status}</span>
-  <span>gameOver: {$gameState.gameOver}</span>
-  <span>Score: {$gameState.score}</span>
-</div>
+<StatusBar />
 
 <main>
   {#each $gameState.fields as row}

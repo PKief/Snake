@@ -1,15 +1,15 @@
 import { BehaviorSubject, fromEvent, Subscription } from 'rxjs';
+import { createPausableTimer } from '../utils';
 import { Food } from './food';
 import { Position } from './position';
 import { Snake } from './snake';
-import { GameConfig, GameFieldType, GameState } from './types';
-import { createPausableTimer } from './utils';
+import { gameState } from './stores';
+import { GameConfig, GameFieldType } from './types';
 
 export class Game {
   config: GameConfig;
   food: Food;
   snake: Snake;
-  gameState: BehaviorSubject<GameState>;
   paused = new BehaviorSubject<boolean>(false);
 
   private intervalSubscription: Subscription | undefined;
@@ -19,12 +19,6 @@ export class Game {
     this.snake = new Snake(new Position(1, 1), 3);
     this.food = new Food(new Position(0, 0));
     this.config = config;
-    this.gameState = new BehaviorSubject<GameState>({
-      fields: [],
-      gameOver: false,
-      score: 0,
-      status: 'initial',
-    });
 
     this.keyPress$.subscribe((event: KeyboardEvent) => {
       switch (event.key) {
@@ -45,11 +39,11 @@ export class Game {
   }
 
   start(): void {
-    this.gameState.next({
-      ...this.gameState.value,
+    gameState.update((state) => ({
+      ...state,
       status: 'playing',
       gameOver: false,
-    });
+    }));
     this.generateRandomFoodPosition();
 
     this.intervalSubscription = createPausableTimer(this.paused).subscribe(
@@ -91,18 +85,18 @@ export class Game {
 
   pause(): void {
     this.paused.next(true);
-    this.gameState.next({
-      ...this.gameState.value,
+    gameState.update((state) => ({
+      ...state,
       status: 'paused',
-    });
+    }));
   }
 
   endPause(): void {
     this.paused.next(false);
-    this.gameState.next({
-      ...this.gameState.value,
+    gameState.update((state) => ({
+      ...state,
       status: 'playing',
-    });
+    }));
   }
 
   restart(): void {
@@ -114,33 +108,33 @@ export class Game {
   }
 
   private stop(): void {
-    this.gameState.next({
-      ...this.gameState.value,
+    gameState.update((state) => ({
+      ...state,
       status: 'stopped',
-    });
+    }));
     this.intervalSubscription?.unsubscribe();
   }
 
   private rerender() {
-    this.gameState.next({
-      ...this.gameState.value,
+    gameState.update((state) => ({
+      ...state,
       fields: this.getGameFields(),
-    });
+    }));
   }
 
   private updateScore(update: number) {
-    this.gameState.next({
-      ...this.gameState.value,
-      score: this.gameState.value.score + update,
-    });
+    gameState.update((state) => ({
+      ...state,
+      score: state.score + update,
+    }));
   }
 
   private endGame() {
     this.stop();
-    this.gameState.next({
-      ...this.gameState.value,
+    gameState.update((state) => ({
+      ...state,
       gameOver: true,
-    });
+    }));
   }
 
   private getGameFields(): GameFieldType[][] {
