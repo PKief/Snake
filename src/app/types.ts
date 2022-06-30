@@ -6,10 +6,15 @@ export type GameConfig = {
 };
 
 export type GameState = {
-  fields: GameFieldType[][];
+  fields: GameField[][];
   score: number;
   gameOver: boolean;
   status: 'playing' | 'stopped' | 'paused' | 'initial';
+};
+
+export type GameField = {
+  id: string;
+  type: GameFieldType;
 };
 
 export type GameFieldType =

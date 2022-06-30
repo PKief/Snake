@@ -1,10 +1,11 @@
 import { BehaviorSubject, fromEvent, Subscription } from 'rxjs';
+import { v4 as uuidv4 } from 'uuid';
 import { createPausableTimer } from '../utils';
 import { Food } from './food';
 import { Position } from './position';
 import { Snake } from './snake';
 import { gameState } from './stores';
-import { GameConfig, GameFieldType } from './types';
+import { GameConfig, GameField } from './types';
 
 export class Game {
   config: GameConfig;
@@ -137,24 +138,38 @@ export class Game {
     }));
   }
 
-  private getGameFields(): GameFieldType[][] {
-    const gameFields: GameFieldType[][] = [];
+  private getGameFields(): GameField[][] {
+    const gameFields: GameField[][] = [];
     for (let y = 0; y < this.config.y; y++) {
       gameFields[y] = [];
       for (let x = 0; x < this.config.x; x++) {
-        gameFields[y][x] = 'Field';
+        const field: GameField = {
+          id: uuidv4(),
+          type: 'Field',
+        };
+        gameFields[y][x] = field;
       }
     }
-    gameFields[this.food.position.y][this.food.position.x] = 'Food';
+
+    const foodField: GameField = {
+      id: uuidv4(),
+      type: 'Food',
+    };
+    gameFields[this.food.position.y][this.food.position.x] = foodField;
 
     for (let i = 0; i < this.snake.parts.length; i++) {
       const part = this.snake.parts[i];
-      gameFields[part.y][part.x] =
+      const type =
         i === 0
           ? 'SnakeHead'
           : i === this.snake.parts.length - 1
           ? 'SnakeTail'
           : 'SnakeBody';
+
+      gameFields[part.y][part.x] = {
+        id: uuidv4(),
+        type,
+      };
     }
 
     return gameFields;

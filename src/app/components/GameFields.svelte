@@ -1,19 +1,54 @@
 <script lang="ts">
+  import { quintOut } from 'svelte/easing';
+
+  import { crossfade } from 'svelte/transition';
   import { gameState } from '../stores';
+
+  const [send, receive] = crossfade({
+    duration: (d) => Math.sqrt(d * 200),
+
+    fallback(node) {
+      const style = getComputedStyle(node);
+      const transform = style.transform === 'none' ? '' : style.transform;
+
+      return {
+        duration: 600,
+        easing: quintOut,
+        css: (t) => `
+					transform: ${transform} scale(${t});
+					opacity: ${t}
+				`,
+      };
+    },
+  });
 </script>
 
 {#each $gameState.fields as row}
   <div class="row">
     {#each row as field}
       <div class="field">
-        {#if field === 'SnakeHead'}
-          <div class="snake-head" />
-        {:else if field === 'SnakeBody'}
+        {#if field.type === 'SnakeHead'}
+          <div
+            class="snake-head"
+            in:receive={{ key: field.id }}
+            out:send={{ key: field.id }}
+          />
+        {:else if field.type === 'SnakeBody'}
           <div class="snake-body" />
-        {:else if field === 'SnakeTail'}
-          <div class="snake-tail" />
-        {:else if field === 'Food'}
-          <div class="food">🍎</div>
+        {:else if field.type === 'SnakeTail'}
+          <div
+            class="snake-tail"
+            in:receive={{ key: field.id }}
+            out:send={{ key: field.id }}
+          />
+        {:else if field.type === 'Food'}
+          <div
+            class="food"
+            in:receive={{ key: field.id }}
+            out:send={{ key: field.id }}
+          >
+            🍎
+          </div>
         {:else}
           <div class="empty" />
         {/if}
@@ -37,8 +72,10 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      position: relative;
 
       .snake-head {
+        position: absolute;
         background: rgb(0, 0, 0);
         border-radius: 50%;
         width: 50%;
@@ -46,6 +83,7 @@
       }
 
       .snake-body {
+        position: absolute;
         background: rgb(0, 0, 0);
         border-radius: 50%;
         width: 40%;
@@ -53,6 +91,7 @@
       }
 
       .snake-tail {
+        position: absolute;
         background: rgb(0, 0, 0);
         border-radius: 50%;
         width: 20%;
