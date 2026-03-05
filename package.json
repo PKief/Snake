@@ -10,7 +10,7 @@
   "author": "Philipp Kief",
   "license": "MIT",
   "devDependencies": {
-    "copy-webpack-plugin": "^11.0.0",
+    "copy-webpack-plugin": "^14.0.0",
     "css-loader": "^6.7.1",
     "favicons": "^7.1.2",
     "favicons-webpack-plugin": "^5.0.2",
